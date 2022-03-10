@@ -19,13 +19,11 @@ class MoviesService {
                     let decoder = JSONDecoder();
                     let movie = try decoder.decode(Movie.self, from: result)
                     completion(movie);
-
                 } catch let error {
                     print("---- ERRORR -----")
                     print(response.response?.statusCode)
                     print(error)
                 }
-
                 //print(String(data: value, encoding: .utf8)!)
             case let .failure(error):
                 print("---- failure -----")
@@ -36,19 +34,20 @@ class MoviesService {
        
     }
     
-    static func search(completion: @escaping (Movie) -> ()) {
+    static func search(searchText: String, completion: @escaping ([Movie]) ->Void) {
                  
-        AF.request(MoviesEndPoint.search).responseData { response in
+        AF.request(MoviesEndPoint.search(searchText)).responseData { response in
+        
             switch response.result {
             case let .success(result):
                 do {
+                    print(result);
                     let decoder = JSONDecoder();
-                    let movie = try decoder.decode(Movie.self, from: result)
-                    completion(movie);
+                    let movies = try decoder.decode(MoviesResult.self, from: result)
+                    completion(movies.results);
 
                 } catch let error {
                     print("---- ERRORR -----")
-                
                     print(error)
                 }
 

@@ -12,4 +12,11 @@ struct Movie: Codable {
     let original_title: String
     let overview: String
     let vote_average: Decimal
+    let poster_path: String
+    
+}
+
+struct MoviesResult: Codable {
+    let page: Int
+    let results: [Movie]
 }
