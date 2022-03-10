@@ -24,10 +24,10 @@
             </objects>
             <point key="canvasLocation" x="1701" y="-80"/>
         </scene>
-        <!--View Controller-->
+        <!--Movies Controller-->
         <scene sceneID="snb-g9-U8I">
             <objects>
-                <viewController id="0Nk-0N-vmP" sceneMemberID="viewController">
+                <viewController id="0Nk-0N-vmP" customClass="MoviesController" customModule="dxc" customModuleProvider="target" sceneMemberID="viewController">
                     <view key="view" contentMode="scaleToFill" id="uqv-UH-408">
                         <rect key="frame" x="0.0" y="0.0" width="414" height="896"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
