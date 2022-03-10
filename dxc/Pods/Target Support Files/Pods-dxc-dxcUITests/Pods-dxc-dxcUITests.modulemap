@@ -1,0 +1,6 @@
+framework module Pods_dxc_dxcUITests {
+  umbrella header "Pods-dxc-dxcUITests-umbrella.h"
+
+  export *
+  module * { export * }
+}
