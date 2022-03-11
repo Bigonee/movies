@@ -12,9 +12,9 @@ class MovieCell: UITableViewCell{
     
     
     @IBOutlet weak var originalTitle: UILabel!
-    
     @IBOutlet weak var poster: UIImageView!
-    
+    @IBOutlet weak var overview: UILabel!
+    @IBOutlet weak var voteAverage: UILabel!   
     
     override func awakeFromNib() {
       super.awakeFromNib();
@@ -23,6 +23,5 @@ class MovieCell: UITableViewCell{
     override func setSelected(_ selected: Bool, animated: Bool) {
       super.setSelected(selected, animated: animated)
     }
-  
     
 }

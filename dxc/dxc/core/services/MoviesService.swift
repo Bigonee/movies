@@ -21,7 +21,6 @@ class MoviesService {
                     completion(movie);
                 } catch let error {
                     print("---- ERRORR -----")
-                    print(response.response?.statusCode)
                     print(error)
                 }
                 //print(String(data: value, encoding: .utf8)!)
@@ -60,4 +59,19 @@ class MoviesService {
                 
        
     }
+    
+    static func getMoveImage(path: String, completion: @escaping (UIImage) ->Void) {  
+        
+        let imageUrl = Constants.baseURLImages + path;
+        let url = URL(string: imageUrl);
+        
+        DispatchQueue.global().async {
+            let data = try? Data(contentsOf: url!)
+            DispatchQueue.main.async {
+                completion(UIImage(data: data!)!);
+            }
+        }
+    }
+    
+    
 }
