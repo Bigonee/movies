@@ -9,56 +9,59 @@ import Alamofire
 import Foundation
 
 class MoviesService {
-    
-    static func getMovie(id: Int,  completion:@escaping (Movie)->Void) {
-                 
+    static func getMovie(id: Int, completion: @escaping (Movie) -> Void) {
         AF.request(MoviesEndPoint.get(id)).responseData { response in
             switch response.result {
             case let .success(result):
                 do {
-                    let decoder = JSONDecoder();
+                    let decoder = JSONDecoder()
                     let movie = try decoder.decode(Movie.self, from: result)
-                    completion(movie);
-
+                    completion(movie)
                 } catch let error {
                     print("---- ERRORR -----")
-                    print(response.response?.statusCode)
                     print(error)
                 }
-
-                //print(String(data: value, encoding: .utf8)!)
+            // print(String(data: value, encoding: .utf8)!)
             case let .failure(error):
                 print("---- failure -----")
                 print(error)
             }
         }
-                
-       
     }
-    
-    static func search(completion: @escaping (Movie) -> ()) {
-                 
-        AF.request(MoviesEndPoint.search).responseData { response in
+
+    static func search(searchText: String, completion: @escaping ([Movie]) -> Void) {
+        AF.request(MoviesEndPoint.search(searchText)).responseData { response in
+
             switch response.result {
             case let .success(result):
                 do {
-                    let decoder = JSONDecoder();
-                    let movie = try decoder.decode(Movie.self, from: result)
-                    completion(movie);
+                    print(result)
+                    let decoder = JSONDecoder()
+                    let movies = try decoder.decode(MoviesResult.self, from: result)
+                    completion(movies.results)
 
                 } catch let error {
                     print("---- ERRORR -----")
-                
                     print(error)
                 }
 
-                //print(String(data: value, encoding: .utf8)!)
+            // print(String(data: value, encoding: .utf8)!)
             case let .failure(error):
                 print("---- failure -----")
                 print(error)
             }
         }
-                
-       
+    }
+
+    static func getMoveImage(path: String, completion: @escaping (UIImage) -> Void) {
+        let imageUrl = Constants.baseURLImages + path
+        let url = URL(string: imageUrl)
+
+        DispatchQueue.global().async {
+            let data = try? Data(contentsOf: url!)
+            DispatchQueue.main.async {
+                completion(UIImage(data: data!)!)
+            }
+        }
     }
 }

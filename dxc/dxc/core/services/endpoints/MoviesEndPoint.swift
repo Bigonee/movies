@@ -5,17 +5,13 @@
 //  Created by marc icart on 10/3/22.
 //
 
-import Foundation
 import Alamofire
-
+import Foundation
 
 enum MoviesEndPoint: URLRequestConvertible {
-    static let baseURLString = "https://api.themoviedb.org/3/"
-    static let token = "eyJhbGciOiJIUzI1NiJ9.eyJhdWQiOiI3ZGNhNmUzYzViNzhhNmIwYWIyZTZhZDViODU3ZWRlMSIsInN1YiI6IjYyMmEwMGIyZDIzNmU2MDA2ZGY5NDBhYSIsInNjb3BlcyI6WyJhcGlfcmVhZCJdLCJ2ZXJzaW9uIjoxfQ.JDgCabQYVfRrMrAhfFAtp3xGxH5EfaMoJQxia31kbUU";
-    static let api_key = "7dca6e3c5b78a6b0ab2e6ad5b857ede1";
-
+    
     case get(Int)
-    case search
+    case search(String)
 
     func asURLRequest() throws -> URLRequest {
         var method: HTTPMethod {
@@ -29,8 +25,10 @@ enum MoviesEndPoint: URLRequestConvertible {
 
         let params: ([String: Any]?) = {
             switch self {
-            case .get, .search:
+            case .get:
                 return nil
+            case let .search(searchText):
+                return ["query": searchText]
             }
         }()
 
@@ -43,23 +41,33 @@ enum MoviesEndPoint: URLRequestConvertible {
                 relativePath = "search/movie"
             }
 
-            var url = URL(string: MoviesEndPoint.baseURLString)!
+            var url = URL(string: Constants.baseURL)!;
             if let relativePath = relativePath {
                 url = url.appendingPathComponent(relativePath)
             }
-           
+
             return url
         }()
-        
+
         var urlComponents = URLComponents(string: "\(url)")
-        urlComponents?.queryItems = [
-            URLQueryItem(name: "api_key", value: MoviesEndPoint.api_key)
-        ]
+
+        switch self {
+        case .get:
+            urlComponents?.queryItems = [
+                URLQueryItem(name: "api_key", value: Constants.api_key),
+            ]
+        case let .search(searchText):
+            urlComponents?.queryItems = [
+                URLQueryItem(name: "api_key", value: Constants.api_key),
+                URLQueryItem(name: "query", value: "\(searchText)")]
+        }
+
         url = (urlComponents?.url)!
+
         var urlRequest = URLRequest(url: url)
         urlRequest.httpMethod = method.rawValue
-        let encoding = JSONEncoding.default;
      
+        let encoding = URLEncoding.default
         return try encoding.encode(urlRequest, with: params)
     }
 }
