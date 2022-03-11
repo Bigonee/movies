@@ -23,8 +23,10 @@ class MovieDetailsController: UIViewController {
         self.loadMovieDetails();
     }
     
-    func loadMovieDetails() {
-        self.title = movie.original_title;
+    func loadMovieDetails() {      
+        self.originalTitle.text = movie.original_title;
+        self.overview.text = movie.overview;
+        self.voteAverage.text = "\(movie.vote_average)";
         MoviesService.getMoveImage(path: movie.poster_path, completion: { posterImage in
             self.poster.image = posterImage;
         });
